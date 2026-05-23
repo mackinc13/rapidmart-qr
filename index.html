@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Rapidmart QR</title>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color"
+content="#ffffff">
+
+<meta name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta name="mobile-web-app-capable"
+content="yes">
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#ffffff;
+font-family:Arial,sans-serif;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+
+#qr{
+width:320px;
+height:320px;
+border:none;
+}
+
+input{
+margin-top:25px;
+width:260px;
+height:60px;
+font-size:28px;
+text-align:center;
+border:2px solid #cccccc;
+border-radius:14px;
+outline:none;
+}
+
+button{
+margin-top:20px;
+width:260px;
+height:60px;
+font-size:22px;
+background:black;
+color:white;
+border:none;
+border-radius:14px;
+}
+
+#title{
+font-size:34px;
+font-weight:bold;
+margin-bottom:25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="title">
+Rapidmart QR
+</div>
+
+<img id="qr">
+
+<input
+type="number"
+id="amount"
+placeholder="Enter Amount">
+
+<button onclick="changeUPI()">
+Change UPI ID
+</button>
+
+<script>
+
+let upi =
+localStorage.getItem("upiid");
+
+if(!upi){
+
+upi =
+prompt("Enter UPI ID");
+
+if(upi){
+
+localStorage.setItem(
+"upiid",
+upi
+);
+
+}
+
+}
+
+function updateQR(){
+
+let amount =
+document
+.getElementById("amount")
+.value;
+
+let upiLink =
+"upi://pay?pa=" +
+upi +
+"&pn=Rapidmart";
+
+if(amount && amount > 0){
+
+upiLink +=
+"&am=" + amount;
+
+}
+
+upiLink +=
+"&cu=INR";
+
+document
+.getElementById("qr")
+.src =
+"https://quickchart.io/qr?text=" +
+encodeURIComponent(upiLink);
+
+}
+
+function changeUPI(){
+
+let newUpi =
+prompt("Enter New UPI ID");
+
+if(newUpi){
+
+upi = newUpi;
+
+localStorage.setItem(
+"upiid",
+upi
+);
+
+updateQR();
+
+}
+
+}
+
+document
+.getElementById("amount")
+.addEventListener(
+"input",
+updateQR
+);
+
+updateQR();
+
+</script>
+
+</body>
+</html>
